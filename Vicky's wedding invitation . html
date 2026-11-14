@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idoma Traditional Marriage | [BRIDE NAME] & [GROOM NAME]</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --burnt-orange: #CC5500;
+      --deep-orange: #9E3F00;
+      --ivory: #FFFFF0;
+      --gold: #D4AF37;
+      --gold-light: #F3E5AB;
+      --green: #046307;
+      --text-dark: #2C1E16;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: var(--ivory);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ================= ENVELOPE OVERLAY ================= */
+    #envelope-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: radial-gradient(circle at center, var(--burnt-orange), var(--deep-orange));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.9s ease, transform 0.9s ease;
+      overflow: hidden;
+    }
+
+    #envelope-screen.opened {
+      opacity: 0;
+      transform: scale(1.08);
+      pointer-events: none;
+    }
+
+    /* Subtle botanical border frame */
+    .envelope-border {
+      position: absolute;
+      inset: 16px;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      pointer-events: none;
+      box-shadow: inset 0 0 25px rgba(4, 99, 7, 0.35);
+    }
+
+    /* Envelope Flap Lines */
+    .flap-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 52%;
+      background: linear-gradient(180deg, #b84a00 0%, var(--burnt-orange) 100%);
+      clip-path: polygon(0 0, 50% 95%, 100% 0);
+      border-bottom: 3px solid var(--gold);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+      transition: transform 0.8s ease;
+      transform-origin: top;
+    }
+
+    #envelope-screen.opened .flap-top {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-header {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: var(--ivory);
+      margin-bottom: 180px;
+      padding: 0 20px;
+    }
+
+    .envelope-header p {
+      letter-spacing: 3px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+
+    .envelope-header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      color: var(--gold);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+
+    /* Gold Wax Seal Button */
+    .wax-seal {
+      position: relative;
+      z-index: 3;
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #f5d76e, var(--gold) 65%, #9c7c19 100%);
+      border: 4px double #fff3c4;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      animation: pulse 2.2s infinite;
+      padding: 10px;
+    }
+
+    .wax-seal span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #3d2b00;
+      line-height: 1.25;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    /* ================= MAIN INVITATION CONTENT ================= */
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--ivory);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+      border-left: 1px solid rgba(212, 175, 55, 0.4);
+      border-right: 1px solid rgba(212, 175, 55, 0.4);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      text-align: center;
+      background: var(--burnt-orange);
+      color: var(--ivory);
+    }
+
+    .hero img {
+      width: 100%;
+      height: 540px;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .hero-overlay {
+      padding: 28px 20px 34px;
+      background: linear-gradient(180deg, var(--deep-orange) 0%, var(--burnt-orange) 100%);
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .couple-names {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.2rem;
+      color: var(--gold);
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .wedding-date {
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    /* Countdown */
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .time-box {
+      background: rgba(255, 255, 240, 0.12);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px 4px;
+    }
+
+    .time-box span {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .time-box small {
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* Sections */
+    .section {
+      padding: 36px 24px;
+      text-align: center;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+    }
+
+    .section-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5rem;
+      color: var(--burnt-orange);
+      margin-bottom: 12px;
+    }
+
+    .invite-text {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .detail-card {
+      border: 1.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 20px;
+      background: #fffdf5;
+      margin-top: 16px;
+    }
+
+    .detail-card h3 {
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .detail-card p {
+      font-size: 1.1rem;
+      margin-bottom: 14px;
+    }
+
+    /* Color of the Day Swatches */
+    .colors-grid {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .swatch-item {
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .swatch {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      margin: 0 auto 6px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    /* Gallery */
+    .gallery-frame {
+      border: 3px solid var(--gold);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .gallery-frame img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Buttons & Form */
+    .btn {
+      display: inline-block;
+      background: var(--green);
+      color: var(--ivory);
+      text-decoration: none;
+      padding: 12px 26px;
+      border-radius: 30px;
+      border: 1.5px solid var(--gold);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #034b05;
+    }
+
+    .rsvp-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .rsvp-form input, .rsvp-form select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      background: #fff;
+    }
+
+    footer {
+      background: var(--burnt-orange);
+      color: var(--ivory);
+      text-align: center;
+      padding: 24px 16px;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ENVELOPE OPENING SCREEN -->
+  <div id="envelope-screen">
+    <div class="envelope-border"></div>
+    <div class="flap-top"></div>
+    <div class="envelope-header">
+      <p>Idoma Traditional Marriage</p>
+      <h1>[Bride] & [Groom]</h1>
+    </div>
+    <button class="wax-seal" onclick="openInvite()">
+      <span>Tap the Seal<br>to Open</span>
+    </button>
+  </div>
+
+  <!-- MAIN INVITATION -->
+  <div class="container">
+    <!-- Hero Section with Color Photo -->
+    <div class="hero">
+      <img src="hero.jpg" alt="Couple Pre-Wedding Portrait">
+      <div class="hero-overlay">
+        <p class="subtitle">Idoma Traditional Marriage</p>
+        <h1 class="couple-names">[Bride's Name] & [Groom's Name]</h1>
+        <p class="wedding-date">[Saturday, November 28, 2026]</p>
+
+        <div class="countdown">
+          <div class="time-box"><span id="days">00</span><small>Days</small></div>
+          <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
+          <div class="time-box"><span id="minutes">00</span><small>Mins</small></div>
+          <div class="time-box"><span id="seconds">00</span><small>Secs</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invitation Wording -->
+    <div class="section">
+      <h2 class="section-title">With Joyful Hearts</h2>
+      <p class="invite-text">
+        The families of <strong>[Bride's Family Name]</strong> and <strong>[Groom's Family Name]</strong> cordially request the honour of your presence at the Idoma Traditional Marriage ceremony of their beloved children.
+      </p>
+
+      <div class="detail-card">
+        <h3>Date & Time</h3>
+        <p>[Saturday, November 28, 2026] • [11:00 AM Prompt]</p>
+
+        <h3>Venue</h3>
+        <p>[Enter Full Venue Name & Address Here]</p>
+
+        <a href="https://maps.google.com" target="_blank" class="btn">View on Google Maps</a>
+      </div>
+    </div>
+
+    <!-- Color of the Day -->
+    <div class="section">
+      <h2 class="section-title">Colours of the Day</h2>
+      <p class="invite-text">Come dressed in your finest traditional attire matching our celebration palette:</p>
+      <div class="colors-grid">
+        <div class="swatch-item">
+          <div class="swatch" style="background: #CC5500;"></div>
+          Burnt Orange
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #FFFFF0;"></div>
+          Ivory
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #D4AF37;"></div>
+          Gold
+        </div>
+        <div class="swatch-item">
+          <div class="swatch" style="background: #046307;"></div>
+          Emerald Green
+        </div>
+      </div>
+    </div>
+
+    <!-- Pre-Wedding Gallery with Black & White Photo -->
+    <div class="section">
+      <h2 class="section-title">Moments of Happiness</h2>
+      <div class="gallery-frame">
+        <img src="gallery.jpg" alt="Couple Happiness Portrait">
+      </div>
+    </div>
+
+    <!-- RSVP Section -->
+    <div class="section">
+      <h2 class="section-title">RSVP</h2>
+      <p class="invite-text">Kindly confirm your attendance so we can reserve your seat.</p>
+      <form class="rsvp-form" onsubmit="handleRSVP(event)">
+        <input type="text" id="guestName" placeholder="Your Full Name" required>
+        <select id="attendance" required>
+          <option value="">Will you be attending?</option>
+          <option value="Joyfully Accepts">Joyfully Accepts</option>
+          <option value="Regretfully Declines">Regretfully Declines</option>
+        </select>
+        <input type="number" id="guestCount" placeholder="Number of Guests (e.g., 1 or 2)" min="1" max="5" required>
+        <button type="submit" class="btn" style="width: 100%; background: var(--burnt-orange);">Send RSVP</button>
+      </form>
+      <p id="rsvp-msg" style="margin-top: 14px; color: var(--green); font-weight: 700;"></p>
+    </div>
+
+    <footer>
+      <p>We look forward to celebrating with you!</p>
+      <p style="color: var(--gold-light); margin-top: 4px;">#[BrideAndGroomHashtag]</p>
+    </footer>
+  </div>
+
+  <script>
+    // Open Envelope Animation
+    function openInvite() {
+      document.getElementById('envelope-screen').classList.add('opened');
+    }
+
+    // Set your exact wedding date & time below (Format: "Month DD, YYYY HH:MM:SS")
+    const weddingDate = new Date("November 28, 2026 11:00:00").getTime();
+
+    setInterval(function () {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      if (distance > 0) {
+        document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+      }
+    }, 1000);
+
+    // Simple RSVP Confirmation
+    function handleRSVP(e) {
+      e.preventDefault();
+      const name = document.getElementById('guestName').value;
+      const status = document.getElementById('attendance').value;
+      document.getElementById('rsvp-msg').innerText = `Thank you, ${name}! Your response (${status}) has been recorded.`;
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
